@@ -1,4 +1,8 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
+
 import React from 'react'
+import { FormGroup, Input } from './FormGroup'
 
 export const LoginRegisterForm = ({ onSubmit, submitButton }) => {
   const handleSubmit = e => {
@@ -12,15 +16,27 @@ export const LoginRegisterForm = ({ onSubmit, submitButton }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form
+      onSubmit={handleSubmit}
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        '> div': {
+          margin: '10px auto',
+          width: '100%',
+          maxWidth: '300px',
+        },
+      }}
+    >
+      <FormGroup>
         <label htmlFor="username">Username</label>
-        <input id="username" />
-      </div>
-      <div>
+        <Input id="username" />
+      </FormGroup>
+      <FormGroup>
         <label htmlFor="password">Password</label>
-        <input id="password" type="password" />
-      </div>
+        <Input id="password" type="password" />
+      </FormGroup>
       <div>{React.cloneElement(submitButton, { type: 'submit' })}</div>
     </form>
   )

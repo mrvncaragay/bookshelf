@@ -1,13 +1,15 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
+
+import 'bootstrap/dist/css/bootstrap-reboot.css'
 import '@reach/dialog/styles.css'
-import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { Logo } from './components/Logo'
-import { Dialog } from '@reach/dialog'
 import { LoginRegisterForm } from './components/LoginRegisterForm'
+import { Modal, OpenButton, Contents } from './components/modal'
+import { Button } from './components/Button'
 
 const App = () => {
-  const [openModal, setOpenModal] = useState('none')
-
   const login = formData => {
     console.log('login', formData)
   }
@@ -17,37 +19,49 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Logo width={100} height={100} />
+    <div
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100vh',
+      }}
+    >
+      <Logo width={80} height={80} />
       <h1>Bookshelf</h1>
-      <div>
-        <button onClick={() => setOpenModal('login')}>Login</button>
-      </div>
-      <div>
-        <button onClick={() => setOpenModal('register')}>Register</button>
-      </div>
+      <div
+        css={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gridGap: '0.75rem',
+        }}
+      >
+        <Modal>
+          <OpenButton>
+            <Button variant="primary">Login</Button>
+          </OpenButton>
+          <Contents aria-label="Login form" title="Login">
+            <LoginRegisterForm
+              onSubmit={login}
+              submitButton={<Button variant="primary">Login</Button>}
+            />
+          </Contents>
+        </Modal>
 
-      <Dialog aria-label="Login form" isOpen={openModal === 'login'}>
-        <div>
-          <button onClick={() => setOpenModal('none')}>close</button>
-        </div>
-        <h3>Login</h3>
-        <LoginRegisterForm
-          onSubmit={login}
-          submitButton={<button variant="secondary">Login</button>}
-        />
-      </Dialog>
-
-      <Dialog aria-label="Login form" isOpen={openModal === 'register'}>
-        <div>
-          <button onClick={() => setOpenModal('none')}>close</button>
-        </div>
-        <h3>Register</h3>
-        <LoginRegisterForm
-          onSubmit={register}
-          submitButton={<button variant="secondary">Register</button>}
-        />
-      </Dialog>
+        <Modal>
+          <OpenButton>
+            <Button variant="secondary">Register</Button>
+          </OpenButton>
+          <Contents aria-label="register form" title="Register">
+            <LoginRegisterForm
+              onSubmit={register}
+              submitButton={<Button variant="primary">Register</Button>}
+            />
+          </Contents>
+        </Modal>
+      </div>
     </div>
   )
 }
