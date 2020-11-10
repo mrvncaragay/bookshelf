@@ -6,8 +6,11 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+ 
     "sourceMap": true,
     "outDir": "./dist",
+    
   },
   "exclude": [
     "typings",

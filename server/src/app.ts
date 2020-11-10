@@ -1,20 +1,38 @@
 import "reflect-metadata";
 import * as express from 'express'
 import { Request, Response } from 'express'
-import { createConnection } from 'typeorm';
-const app = express()
-app.use(express.json())
-
+import * as cors from 'cors'
+import { createConnection, ILike } from 'typeorm';
+import { Book } from './entity/Book'
 
 const main = async () => {
-  const conn = await createConnection();
-  conn.runMigrations();
+  const app = express()
+  app.use(express.json())
 
-  app.get("/", function(req: Request, res: Response) {
-    // here we will have logic to return all users
-    res.json({
-      success: "got it"
-    })
+  const conn = await createConnection();
+   // conn.runMigrations();
+
+  app.use(
+    cors({
+      origin: 'http://localhost:3001',
+      credentials: true,
+    }),
+  );
+  
+  app.get("/books", async function(req: Request, res: Response) {
+    const { query: { query } } = req;
+
+    const books = await conn.getRepository(Book).find({
+      where: [
+        { title: ILike(`%${query}%`)}, 
+        { author: ILike(`%${query}%`) }
+      ],
+      order: {
+        title: "ASC"
+      }
+    });
+
+    res.json({ books })
   });
   
   
